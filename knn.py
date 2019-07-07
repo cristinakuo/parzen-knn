@@ -1,6 +1,9 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
+CLASS_1 = 1
+CLASS_2 = 2
+
 # Returns a list of tuples (index, value)
 def knn_search(k,data,ref):
     data_indexed = enumerate(data)
@@ -24,7 +27,26 @@ def knn_estimate(k,samples_data,X):
 
     return p_estimate
 
-def knn_classify(k,samples_class1,samples_class2,x):
+def knn_classify(k,samples_class1,samples_class2,X):
+    label_real = [1] * len(samples_class1) + [2] * len(samples_class2)  # real label of data
+    label_test = []
+    for x in X:
+        result = knn_search(k, samples_class1 + samples_class2, x)
+        result_index = [a[0] for a in result] # keeps first element of each tuple in result
+        result_val = [a[1] for a in result]  # keeps second element of each tuple in result
+        label_knn = [label_real[n] for n in result_index]  # label of the points obtained with knnsearch
+
+        count1 = len([n for n in label_knn if n == 1])
+        count2 = len([n for n in label_knn if n == 2])
+
+        if count1 > count2:
+            label_test.append(CLASS_1)
+        else:
+            label_test.append(CLASS_2)
+
+    return label_test
+
+def _knn_classify(k,samples_class1,samples_class2,x):
     result = knn_search(k,samples_class1+samples_class2,x)
     result_val = [a[1] for a in result]  # keeps second element of each tuple in result
     result_index = [a[0] for a in result] # keeps first element of each tuple in result
@@ -51,6 +73,7 @@ if __name__ == "__main__":
     #plt.plot(X, p_estimate, 'r-')
     #plt.show()
 
-    #class_result = knn_classify(5,x_samples_normal,x_samples_uniform,)
-    #print(class_result)
+    a = [1,2,3,4,5,6,7,8,-10]
+    test_label = knn_classify(5,x_samples_1,x_samples_2,a)
+    print(test_label)
 

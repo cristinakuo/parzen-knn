@@ -9,18 +9,28 @@ CLASS_1 = 1
 CLASS_2 = 2
 
 # ITEM a)
+print("ITEM a) Generacion de distribuciones")
 # Generamos muestras con las distribuciones
 N = int(10e4)
 x_samples_1 = np.random.uniform(2,10,N)
 x_samples_2 = np.random.normal(2,4,N)
 
 # Comprobamos que las distribuciones son correctas
+plt.figure('Histograma clase 1')
 plt.hist(x_samples_1,bins='auto')
-plt.show()
-plt.hist(x_samples_2,bins='auto')
+plt.title('Muestras clase 1: Uniforme (2,10)')
+plt.ylabel('Frecuencia')
 plt.show()
 
+plt.figure('Histograma clase 2')
+plt.hist(x_samples_2,bins='auto')
+plt.title('Muestras clase 2: Normal (2,4)')
+plt.ylabel('Frecuencia')
+plt.show()
+exit()
 # ITEM b)
+print("ITEM b) Parzen estimate")
+
 # Objetivo: buscar el mejor h
 # Generamos unos datos de validacion que sirvan para encontrar el h optimo
 N_validate = 10000
@@ -42,6 +52,7 @@ plt.plot(X,p_estim_1_parzen, 'r-')
 plt.plot(X,p_estim_2_parzen, 'b-')
 plt.show()
 
+print('ITEM c) knn estimate')
 # ITEM c) Estimar usando k vecinos usando k= 1, 10, 50, 100
 k_list = [1,10,50,100]
 for k in k_list:
@@ -50,10 +61,11 @@ for k in k_list:
 
     myplt.plot_distributions(X,p_estim_1_knn,p_estim_2_knn)
 
-# d) Realizar un clasificador para B y C y clasificar 10e2 muestras nueva
+print('ITEM d) Bayes classifier with parzen and knn estimation')
+# ITEM d) Realizar un clasificador para B y C y clasificar 10e2 muestras nueva
 # Generate mixture distribution
 N_test = 100
-x_mix = []
+x_mix = [] # TODO: renombrar
 label_real = []
 label_test = []
 
@@ -89,7 +101,11 @@ for k in k_list:
     err_knn = myplt.get_error(label_real,label_test_knn)
     print('Error with knn is: '+str(err_knn) + " k=" +str(k))
 
-# e) Implementar clasificacion del K vecino mas cercano para K = 1, 11 y 51.
+print('ITEM e) knn classifier')
+# d) Implementar clasificacion del K vecino mas cercano para K = 1, 11 y 51.
 
-#       Calcular el error al clasificar las mismas muestras de D).
-# Conclusionesss
+for k in k_list:
+    label_test_knnclas = knn.knn_classify(k,x_samples_1,x_samples_2,x_mix)
+    err_knnclas = myplt.get_error(label_real,label_test_knnclas)
+    print('Error with knn classify is: ' + str(err_knnclas) + " k=" + str(k))
+
