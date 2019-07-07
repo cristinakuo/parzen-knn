@@ -1,8 +1,12 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import rand_gen
+import plots as myplt
+import errors as err
+
 CLASS_1 = 1
 CLASS_2 = 2
-def estimate(data,X,h):
+def parzen_estimate(data,X,h):
     N = len(data)
     estimate = []
     for x in X:
@@ -31,59 +35,31 @@ def bayesian_classify(px_1,px_2):
 
     return label_test
 
-def find_h(h_list, x_sample_1, x_sample_2, N_classify):
-    x_mix = []
-    label_real = []
+def try_several_h(h_list, x_validate_1, x_validate_2, N_classify):
+    x_mix,label_real = rand_gen.rand_mix(N_classify)
 
-    # Generate mix of distributions
-    U = np.random.uniform(0, 1, N_classify)
-    for u in U:
-        if u < 0.5:
-            sample = np.random.uniform(2, 10)
-            label_real.append(CLASS_1)
-        else:
-            sample = np.random.normal(2, 4)
-            label_real.append(CLASS_2)
-        x_mix.append(sample)
-
-    plt.hist(x_mix, bins='auto')
-    plt.show()
-
-    errors = []
     for h in h_list:
-        px_given_1 = estimate(x_sample_1, x_mix, h)
-        px_given_2 = estimate(x_sample_2, x_mix, h)
+        # Obtenemos las densidades estimadas
+        px_given_1 = parzen_estimate(x_validate_1, x_mix, h)
+        px_given_2 = parzen_estimate(x_validate_2, x_mix, h)
         label_test = bayesian_classify(px_given_1, px_given_2)
 
-        k = 0
-
-        # PLOT
-        for lb_test, lb_real in zip(label_test, label_real):
-            if lb_test == 1:
-                plt.plot(x_mix[k], 'r.')
-
-            else:
-                plt.plot(x_mix[k], 'b.')
-
-            if lb_test != lb_real:
-                plt.plot(x_mix[k], 'yo')
-            k = k + 1
-        plt.show()
+        # Grafico
+        myplt.plot_distributions(x_mix,px_given_1,px_given_2)
 
         # Error
-        label_error = [a - b for a, b in zip(label_real, label_test)]
-        n_errors = len([n for n in label_error if n != 0])
-        error_rate = n_errors / len(label_error)
-        errors.append(error_rate)
+        error_rate = err.get_error(label_real,label_test)
         print("h="+str(h)+" error="+str(error_rate))
 
 
-
 if __name__ == "__main__":
+
     # Generamos muestras con las distribuciones
     N = int(10e4)
     x_samples_1 = np.random.uniform(2, 10, N)
     x_samples_2 = np.random.normal(2, 4, N)
+    try_several_h([0.03,0.1,0.3,0.9], x_samples_1, x_samples_2, 100)
+    exit()
     h = 1
     #X = np.linspace(-10, 10, 100)
     #p_estimate = estimate(x_samples_normal, X,h)
@@ -112,23 +88,13 @@ if __name__ == "__main__":
     plt.hist(x_mix, bins='auto')
     plt.show()
 
-    px_given_1 = estimate(x_samples_1, x_mix, h)
-    px_given_2 = estimate(x_samples_2, x_mix, h)
+    px_given_1 = parzen_estimate(x_samples_1, x_mix, h)
+    px_given_2 = parzen_estimate(x_samples_2, x_mix, h)
 
     label_test = bayesian_classify(px_given_1,px_given_2)
 
-    k = 0
-    for lb_test, lb_real in zip(label_test, label_real):
-        if lb_test == 1:
-            plt.plot(x_mix[k], 'r.')
+    myplt.plot_with_labels(x_validate,label_real,label_test)
 
-        else:
-            plt.plot(x_mix[k], 'b.')
-
-        if lb_test != lb_real:
-            plt.plot(x_mix[k], 'yo')
-        k = k + 1
-    plt.show()
     # Error
     label_error = [a - b for a, b in zip(label_real, label_test)]
     n_errors = len([n for n in label_error if n != 0])
