@@ -2,6 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import parzen
 import knn
+import plots as myplt
 #import bayesian
 
 CLASS_1 = 1
@@ -34,21 +35,59 @@ h = 0.3
 X = np.linspace(-10,10,100)
 
 h_list = np.linspace(0,1,10)
-h = 0.6
-p_estim_1 = parzen.estimate(x_samples_1,X,h)
-p_estim_2 = parzen.estimate(x_samples_2,X,h)
+p_estim_1_parzen = parzen.estimate(x_samples_1,X,h)
+p_estim_2_parzen = parzen.estimate(x_samples_2,X,h)
 
-plt.plot(X,p_estim_1, 'r-')
-plt.plot(X,p_estim_2, 'b-')
+plt.plot(X,p_estim_1_parzen, 'r-')
+plt.plot(X,p_estim_2_parzen, 'b-')
 plt.show()
 
 # ITEM c) Estimar usando k vecinos usando k= 1, 10, 50, 100
-k_list=[2]
+k_list = [1,10,50,100]
 for k in k_list:
-    p_estim_1_knn = knn.knn_estimate(k,x_samples_1,X)
-    p_estim_2_knn = knn.knn_estimate(k,x_samples_2,X)
+    p_estim_1_knn = knn.knn_estimate(k, x_samples_1, X)
+    p_estim_2_knn = knn.knn_estimate(k, x_samples_2, X)
 
-# d) Realizar un clasificador para B y C y clasificar 10e2 muestras nuevas
+    myplt.plot_distributions(X,p_estim_1_knn,p_estim_2_knn)
+
+# d) Realizar un clasificador para B y C y clasificar 10e2 muestras nueva
+# Generate mixture distribution
+N_test = 100
+x_mix = []
+label_real = []
+label_test = []
+
+U = np.random.uniform(0, 1, N_test)
+for u in U:
+    if u < 0.5:
+        sample = np.random.uniform(2, 10)
+        label_real.append(CLASS_1)
+    else:
+        sample = np.random.normal(2, 4)
+        label_real.append(CLASS_2)
+    x_mix.append(sample)
+
+h=0.3
+k = 10
+
+# Clasificador con parzen
+px_given_1_parzen = parzen.estimate(x_samples_1, x_mix, h)
+px_given_2_parzen = parzen.estimate(x_samples_2, x_mix, h)
+label_test_parzen = parzen.bayesian_classify(px_given_1_parzen, px_given_2_parzen)
+myplt.plot_distributions(x_mix,px_given_1_parzen,px_given_2_parzen)
+myplt.plot_with_labels(x_mix,label_real,label_test_parzen)
+err_parzen = myplt.get_error(label_real,label_test_parzen)
+print('Error with parzen is: '+str(err_parzen))
+
+# Clasificador con knn
+for k in k_list:
+    px_given_1_knn = knn.knn_estimate(k,x_samples_1, x_mix)
+    px_given_2_knn = knn.knn_estimate(k,x_samples_2, x_mix)
+    label_test_knn = parzen.bayesian_classify(px_given_1_knn, px_given_2_knn)
+    myplt.plot_distributions(x_mix,px_given_1_knn,px_given_2_knn)
+    myplt.plot_with_labels(x_mix,label_real,label_test_knn)
+    err_knn = myplt.get_error(label_real,label_test_knn)
+    print('Error with knn is: '+str(err_knn) + " k=" +str(k))
 
 # e) Implementar clasificacion del K vecino mas cercano para K = 1, 11 y 51.
 
