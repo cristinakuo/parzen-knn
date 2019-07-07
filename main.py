@@ -1,6 +1,9 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import parzen
+import knn
+import bayesian
+
 
 CLASS_1 = 1
 CLASS_2 = 2
@@ -8,8 +11,8 @@ CLASS_2 = 2
 # ITEM a)
 # Generamos muestras con las distribuciones
 N = int(10e4)
-x_samples_class1 = np.random.uniform(2,10,N)
-x_samples_class2 = np.random.normal(2,4,N)
+x_samples_1 = np.random.uniform(2,10,N)
+x_samples_2 = np.random.normal(2,4,N)
 
 # Comprobamos que las distribuciones son correctas
 plt.hist(x_samples_class1,bins='auto')
@@ -23,11 +26,11 @@ X = np.linspace(-10,10,100)
 
 h_list = np.linspace(0,1,10)
 h = 0.6
-p_estimate_normal = parzen.estimate(x_samples_normal,X,h)
-p_estimate_uniform = parzen.estimate(x_samples_uniform,X,h)
+p_estim_1 = parzen.estimate(x_samples_1,X,h)
+p_estim_2 = parzen.estimate(x_samples_1,X,h)
 
-plt.plot(X,p_estimate_normal, 'r-')
-plt.plot(X,p_estimate_uniform, 'b-')
+plt.plot(X,p_estim_1, 'r-')
+plt.plot(X,p_estim_2, 'b-')
 plt.show()
 
 # Juntamos las muestras de cada clase para crear una mezcla
@@ -43,7 +46,9 @@ for u in U:
         x_mix.append(x_samples_normal)
         label_real.append(CLASS_2)
 
-for h in h_list:
+# Classify with bayesian estimation
+
+#for h in h_list:
     #bayesian classifier with x_mix
 # Criterio: estimar y usar para clasificar
 
@@ -55,4 +60,3 @@ for h in h_list:
 
 #       Calcular el error al clasificar las mismas muestras de D).
 # Conclusionesss
-
