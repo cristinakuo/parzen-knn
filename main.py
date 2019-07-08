@@ -12,12 +12,12 @@ CLASS_2 = 2
 
 # ITEM a)
 print("ITEM a) Generacion de distribuciones")
-# Generamos muestras con las distribuciones
+# Generate random training samples
 N = int(10e4)
 x_samples_1 = np.random.uniform(2,10,N)
 x_samples_2 = np.random.normal(2,2,N)
 
-# Comprobamos que las distribuciones son correctas
+# Check with histograms
 plt.figure('Histograma clase 1')
 plt.hist(x_samples_1,bins='auto')
 plt.title('Muestras clase 1: Uniforme (2,10)')
@@ -43,7 +43,7 @@ x_validate_2 = np.random.uniform(2, 4, N_validate)
 
 
 # Usar las muestras generadas en a) y el h elegido para estimar las distribuciones F1 y F2
-X = np.linspace(-4,12,100)
+X = np.linspace(-4,12,100) # TODO: aclarar esto en el informe
 h = 0.3 # El valor elegido
 #p_estim_1_parzen = parzen.parzen_estimate(x_samples_1,X,h)
 #p_estim_2_parzen = parzen.parzen_estimate(x_samples_2,X,h)
@@ -67,7 +67,7 @@ k_list = [1,10,50,100]
 #for k in k_list:
 #    p_estim_1_knn = knn.knn_estimate(k, x_samples_1, X)
 #    p_estim_2_knn = knn.knn_estimate(k, x_samples_2, X)
-
+#
 #    myplt.plot_est_vs_theo(X,p_estim_1_knn,p_estim_2_knn,'-','Estimacion con KNN, k='+str(k))
 
 print('ITEM d) Bayes classifier with parzen and knn estimation')
