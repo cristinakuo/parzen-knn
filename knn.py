@@ -10,6 +10,7 @@ def knn_search(k,data,ref):
     data_indexed = enumerate(data)
     return sorted(data_indexed, key=lambda x: abs(x[1]-ref))[:k]
 
+# Devuelve la probabilidad estimada con knn evaluada en los puntos de X
 def knn_estimate(k,samples_data,X):
     p_estimate = []
     N = len(samples_data)

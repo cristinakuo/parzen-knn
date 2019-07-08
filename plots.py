@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 from scipy.stats import norm
 import numpy as np
 
-def plot_with_labels(x,label_real,label_test):
+def plot_with_labels(x,label_real,label_test,title='no_title'):
     n = 0
     for lb_test, lb_real in zip(label_test, label_real):
         if lb_test == 1:
@@ -13,6 +13,8 @@ def plot_with_labels(x,label_real,label_test):
             plt.plot(x[n], 'yx')
         n = n + 1
 
+    if title != 'no_title':
+        plt.title(title)
     plt.show()
 
 

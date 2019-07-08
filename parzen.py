@@ -56,17 +56,17 @@ if __name__ == "__main__":
     N = int(10e4)
     x_samples_1 = np.random.uniform(2, 10, N)
     x_samples_2 = np.random.normal(2, 2, N)
-    try_several_h([0.03,0.1,0.3,0.9], x_samples_1, x_samples_2, 100)
-    exit()
+    #try_several_h([0.03,0.1,0.3,0.9], x_samples_1, x_samples_2, 100)
+    #exit()
     h = 1
-    #X = np.linspace(-10, 10, 100)
-    #p_estimate = estimate(x_samples_normal, X,h)
+    X = np.linspace(-10, 10, 100)
+    p_estimate = parzen_estimate(x_samples_1, X,h)
     # TODO: elegir un h
 
     # Grafico
-    #plt.plot(X, p_estimate, 'r-')
-    #plt.show()
-
+    plt.plot(X, p_estimate, 'r-')
+    plt.show()
+    exit()
     # Generate mixture distribution
     N = 100
     x_mix = []

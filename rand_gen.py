@@ -11,7 +11,7 @@ def rand_mix(N):
             sample = np.random.uniform(2, 10)
             label_real.append(CLASS_1)
         else:
-            sample = np.random.normal(2, 4)
+            sample = np.random.normal(2, 2)
             label_real.append(CLASS_2)
         x_mix.append(sample)
     return x_mix,label_real
