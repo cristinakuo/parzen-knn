@@ -23,6 +23,7 @@ def window_function(x):
     else:
         return 0
 
+# TODO: move
 def bayesian_classify(px_1,px_2):
     label_test = []
     for p1, p2 in zip(px_1, px_2):
@@ -61,7 +62,6 @@ if __name__ == "__main__":
     h = 1
     X = np.linspace(-10, 10, 100)
     p_estimate = parzen_estimate(x_samples_1, X,h)
-    # TODO: elegir un h
 
     # Grafico
     plt.plot(X, p_estimate, 'r-')

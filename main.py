@@ -72,37 +72,34 @@ k_list = [1,10,50,100]
 
 print('ITEM d) Bayes classifier with parzen and knn estimation')
 # ITEM d) Realizar un clasificador para B y C y clasificar 10e2 muestras nueva
-# Generate mixture distribution
+# Generar una mezcla de 100 puntos
 N_test = 100
-label_test = []
-
 x_test,label_real = rand_gen.rand_mix(N_test)
 
-h=0.3
-
 # Clasificador con parzen
-px_given_1_parzen = parzen.parzen_estimate(x_samples_1, x_test, h)
-px_given_2_parzen = parzen.parzen_estimate(x_samples_2, x_test, h)
-label_test_parzen = parzen.bayesian_classify(px_given_1_parzen, px_given_2_parzen)
-myplt.plot_with_labels(x_test,label_real,label_test_parzen,'Clasificacion bayesiana con estimacion Parzen, h='+str(h))
-err_parzen = err.get_error(label_real,label_test_parzen)
-print('Error with parzen is: '+str(err_parzen))
+#h=0.3
+#px_given_1_parzen = parzen.parzen_estimate(x_samples_1, x_test, h)
+#px_given_2_parzen = parzen.parzen_estimate(x_samples_2, x_test, h)
+#label_test_parzen = parzen.bayesian_classify(px_given_1_parzen, px_given_2_parzen)
+#myplt.plot_with_labels(x_test,label_real,label_test_parzen,'Clasificacion bayesiana con estimacion Parzen, h='+str(h))
+#err_parzen = err.get_error(label_real,label_test_parzen)
+#print('Error with parzen is: '+str(err_parzen))
 
 # Clasificador con knn
-for k in k_list:
-    px_given_1_knn = knn.knn_estimate(k,x_samples_1, x_test)
-    px_given_2_knn = knn.knn_estimate(k,x_samples_2, x_test)
-    label_test_knn = parzen.bayesian_classify(px_given_1_knn, px_given_2_knn)
-    myplt.plot_with_labels(x_test,label_real,label_test_knn,'Clasificacion bayesiana con estimacion KNN, k='+str(k))
-    err_knn = err.get_error(label_real,label_test_knn)
-    print('Error with knn is: '+str(err_knn) + " k=" +str(k))
+#for k in k_list:
+#    px_given_1_knn = knn.knn_estimate(k,x_samples_1, x_test)
+#    px_given_2_knn = knn.knn_estimate(k,x_samples_2, x_test)
+#    label_test_knn = parzen.bayesian_classify(px_given_1_knn, px_given_2_knn)
+#    myplt.plot_with_labels(x_test,label_real,label_test_knn,'Clasificacion bayesiana con estimacion KNN, k='+str(k))
+#    err_knn = err.get_error(label_real,label_test_knn)
+#    print('Error with knn is: '+str(err_knn) + " k=" +str(k))
 
-exit()
 print('ITEM e) knn classifier')
-# d) Implementar clasificacion del K vecino mas cercano para K = 1, 11 y 51.
-
+# e) Implementar clasificacion del K vecino mas cercano para K = 1, 11 y 51.
+k_list = [1,11,51]
 for k in k_list:
-    label_test_knnclas = knn.knn_classify(k,x_samples_1,x_samples_2,x_mix)
-    err_knnclas = myplt.get_error(label_real,label_test_knnclas)
+    label_test_knnclas = knn.knn_classify(k,x_samples_1,x_samples_2,x_test)
+    err_knnclas = err.get_error(label_real,label_test_knnclas)
+    myplt.plot_with_labels(x_test, label_real, label_test_knnclas,'Clasificacion de KNN, k=' + str(k))
     print('Error with knn classify is: ' + str(err_knnclas) + " k=" + str(k))
 

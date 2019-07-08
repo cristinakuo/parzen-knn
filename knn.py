@@ -29,6 +29,7 @@ def knn_estimate(k,samples_data,X):
 
     return p_estimate
 
+# Devuelve las etiquetas de la clasificacion de X, a partir de los datos de entrenamiento.
 def knn_classify(k,samples_class1,samples_class2,X):
     label_real = [1] * len(samples_class1) + [2] * len(samples_class2)  # real label of data
     label_test = []
