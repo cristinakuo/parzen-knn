@@ -4,7 +4,8 @@ import matplotlib.pyplot as plt
 CLASS_1 = 1
 CLASS_2 = 2
 
-# Returns a list of tuples (index, value)
+# Devuelve los k vecinos mas cercanos en la lista 'data' del valor 'ref'.
+# Devuelve una lista de k tuplas: (indice,valor)
 def knn_search(k,data,ref):
     data_indexed = enumerate(data)
     return sorted(data_indexed, key=lambda x: abs(x[1]-ref))[:k]

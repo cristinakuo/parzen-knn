@@ -6,16 +6,14 @@ import errors as err
 
 CLASS_1 = 1
 CLASS_2 = 2
+
 def parzen_estimate(data,X,h):
     N = len(data)
     estimate = []
     for x in X:
-
         sum = 0
-
         for x_i in data:
             sum = sum + window_function((x-x_i)/h)
-
         estimate.append(sum/N/h)
     return estimate
 
@@ -45,7 +43,7 @@ def try_several_h(h_list, x_validate_1, x_validate_2, N_classify):
         label_test = bayesian_classify(px_given_1, px_given_2)
 
         # Grafico
-        myplt.plot_distributions(x_mix,px_given_1,px_given_2)
+        myplt.plot_est_vs_theo(x_mix,px_given_1,px_given_2,'o','h='+str(h))
 
         # Error
         error_rate = err.get_error(label_real,label_test)
@@ -57,7 +55,7 @@ if __name__ == "__main__":
     # Generamos muestras con las distribuciones
     N = int(10e4)
     x_samples_1 = np.random.uniform(2, 10, N)
-    x_samples_2 = np.random.normal(2, 4, N)
+    x_samples_2 = np.random.normal(2, 2, N)
     try_several_h([0.03,0.1,0.3,0.9], x_samples_1, x_samples_2, 100)
     exit()
     h = 1

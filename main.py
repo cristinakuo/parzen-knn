@@ -13,7 +13,7 @@ print("ITEM a) Generacion de distribuciones")
 # Generamos muestras con las distribuciones
 N = int(10e4)
 x_samples_1 = np.random.uniform(2,10,N)
-x_samples_2 = np.random.normal(2,4,N)
+x_samples_2 = np.random.normal(2,2,N)
 
 # Comprobamos que las distribuciones son correctas
 plt.figure('Histograma clase 1')
@@ -27,7 +27,7 @@ plt.hist(x_samples_2,bins='auto')
 plt.title('Muestras clase 2: Normal (2,4)')
 plt.ylabel('Frecuencia')
 plt.show()
-exit()
+
 # ITEM b)
 print("ITEM b) Parzen estimate")
 
@@ -36,21 +36,28 @@ print("ITEM b) Parzen estimate")
 N_validate = 10000
 x_validate_1 = np.random.uniform(2, 10, N_validate)
 x_validate_2 = np.random.uniform(2, 4, N_validate)
-#parzen.find_h([0.001, 0.01, 0.03, 0.1, 0.3, 0.9],x_validate_1,x_validate_2,100)
+# DEBUG: descomentar
+#parzen.try_several_h([0.001, 0.01, 0.03, 0.1, 0.3, 0.9],x_validate_1,x_validate_2,100)
 
-# El h elegido
-h = 0.3
 
 # Usar las muestras generadas en a) y el h elegido para estimar las distribuciones F1 y F2
-X = np.linspace(-10,10,100)
+X = np.linspace(-4,12,100)
+h = 0.3 # El valor elegido
+p_estim_1_parzen = parzen.parzen_estimate(x_samples_1,X,h)
+p_estim_2_parzen = parzen.parzen_estimate(x_samples_2,X,h)
+myplt.plot_est_vs_theo(X,p_estim_1_parzen,p_estim_2_parzen,'-','Estimacion con Parzen, h=0.3')
 
-h_list = np.linspace(0,1,10)
-p_estim_1_parzen = parzen.estimate(x_samples_1,X,h)
-p_estim_2_parzen = parzen.estimate(x_samples_2,X,h)
+# Para analisis
+h = 0.01 # El valor elegido
+p_estim_1_parzen = parzen.parzen_estimate(x_samples_1,X,h)
+p_estim_2_parzen = parzen.parzen_estimate(x_samples_2,X,h)
+myplt.plot_est_vs_theo(X,p_estim_1_parzen,p_estim_2_parzen,'-','Estimacion con Parzen, h=0.01')
 
-plt.plot(X,p_estim_1_parzen, 'r-')
-plt.plot(X,p_estim_2_parzen, 'b-')
-plt.show()
+h = 0.9 # El valor elegido
+p_estim_1_parzen = parzen.parzen_estimate(x_samples_1,X,h)
+p_estim_2_parzen = parzen.parzen_estimate(x_samples_2,X,h)
+myplt.plot_est_vs_theo(X,p_estim_1_parzen,p_estim_2_parzen,'-','Estimacion con Parzen, h=0.9')
+exit()
 
 print('ITEM c) knn estimate')
 # ITEM c) Estimar usando k vecinos usando k= 1, 10, 50, 100
@@ -59,7 +66,7 @@ for k in k_list:
     p_estim_1_knn = knn.knn_estimate(k, x_samples_1, X)
     p_estim_2_knn = knn.knn_estimate(k, x_samples_2, X)
 
-    myplt.plot_distributions(X,p_estim_1_knn,p_estim_2_knn)
+    myplt.plot_distributions(X,p_estim_1_knn,p_estim_2_knn,'-')
 
 print('ITEM d) Bayes classifier with parzen and knn estimation')
 # ITEM d) Realizar un clasificador para B y C y clasificar 10e2 muestras nueva
