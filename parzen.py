@@ -1,5 +1,4 @@
 import numpy as np
-import matplotlib.pyplot as plt
 import rand_gen
 import plots as myplt
 import errors as err
@@ -46,8 +45,6 @@ def try_several_h(h_list, x_validate_1, x_validate_2, N_classify):
 
 
 if __name__ == "__main__":
-
-    # Generamos muestras con las distribuciones
     N = int(10e4)
     x_samples_1 = np.random.uniform(2, 10, N)
     x_samples_2 = np.random.normal(2, 2, N)

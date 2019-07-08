@@ -6,7 +6,6 @@ import plots as myplt
 import rand_gen
 import errors as err
 import bayes as by
-#import bayesian
 
 CLASS_1 = 1
 CLASS_2 = 2
