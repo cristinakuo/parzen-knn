@@ -33,18 +33,20 @@ def knn_estimate(k,samples_data,X):
 
     return p_estimate
 
-# Devuelve las etiquetas de la clasificacion de X, a partir de los datos de entrenamiento.
+# Returns classification labels
 def knn_classify(k,samples_class1,samples_class2,X):
-    label_real = [1] * len(samples_class1) + [2] * len(samples_class2)  # real label of data
+    label_real = [CLASS_1] * len(samples_class1) + [CLASS_2] * len(samples_class2)  # real label of data
     label_test = []
+    samples_class1 = samples_class1.tolist()
+    samples_class2 = samples_class2.tolist()
     for x in X:
         result = knn_search(k, samples_class1 + samples_class2, x)
         result_index = [a[0] for a in result] # keeps first element of each tuple in result
         result_val = [a[1] for a in result]  # keeps second element of each tuple in result
         label_knn = [label_real[n] for n in result_index]  # label of the points obtained with knnsearch
 
-        count1 = len([n for n in label_knn if n == 1])
-        count2 = len([n for n in label_knn if n == 2])
+        count1 = len([n for n in label_knn if n == CLASS_1])
+        count2 = len([n for n in label_knn if n == CLASS_2])
 
         if count1 > count2:
             label_test.append(CLASS_1)
@@ -76,9 +78,9 @@ if __name__ == "__main__":
     x_samples_2 = np.random.normal(2, 4, N).tolist()
     X = np.linspace(-10, 20, 1000)
     k = 2
-    p_estimate = knn_estimate(k,x_samples_2, X)
+    #p_estimate = knn_estimate(k,x_samples_2, X)
 
-    plt.plot(X, p_estimate, 'r-')
+    #plt.plot(X, p_estimate, 'r-')
     plt.show()
 
     #a = [1,2,3,4,5,6,7,8,-10]
